@@ -25,7 +25,8 @@ class Projects {
         $files = glob($dir . "*");
         foreach($files as $file)
         {
-            if(is_dir($file)){$dirArray[] = $file;}
+            if(is_dir($file) and file_exists($file.'/mage')){$dirArray[] = $file;}
+            else if(is_dir($file) and file_exists($file.'/public'.'/mage')){$dirArray[] = $file;}
         }
         
         return $dirArray;   

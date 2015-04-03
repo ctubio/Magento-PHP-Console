@@ -34,7 +34,17 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
         Varien_Profiler::enable();
         Mage::setIsDeveloperMode(true);
         umask(0);
-        Mage::app((array_key_exists('isAdmin', $params) && $params['isAdmin']) ? 'admin' : '');
+        Mage::app('admin');
+        $title = '<img src="' . Mage::getDesign()->getSkinUrl() . Mage::getStoreConfig('design/header/logo_src') .  '" /><br />';
+        $title .= (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
+    }
+    $mageFile = $siteDirectory . 'public/app/Mage.php';
+    if(file_exists($mageFile)){
+        require_once $mageFile;
+        Varien_Profiler::enable();
+        Mage::setIsDeveloperMode(true);
+        umask(0);
+        Mage::app('admin');
         $title = '<img src="' . Mage::getDesign()->getSkinUrl() . Mage::getStoreConfig('design/header/logo_src') .  '" /><br />';
         $title .= (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
     }
@@ -55,11 +65,9 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
  * Source on Github http://github.com/Seldaek/php-console
  */
 if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
-    if(!file_exists('remote.flag')) {
     	header('HTTP/1.1 401 Access unauthorized');
     	die('ERR/401 Go Away');
     }
-}
 
 define('PHP_CONSOLE_VERSION', '1.3.0-dev');
 require 'krumo/class.krumo.php';
@@ -93,7 +101,7 @@ if (isset($_POST['code'])) {
     }
 
     ob_start();
-    eval($code);
+    echo eval($code);
     $debugOutput = ob_get_clean();
 
     if (isset($_GET['js'])) {
@@ -109,11 +117,13 @@ if (isset($_POST['code'])) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Magento/Zend/PHP Debug Console</title>
+    <title><?php echo isset($site)?$site.'@':NULL; ?>mage.dev</title>
     <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css" />
     <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="./assets/styles/docs.css" />
+    <link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./assets/img/favicon.ico" type="image/x-icon" />
     <script src="./assets/js/jquery-1.7.1.min.js"></script>
     <script src="./assets/js/jquery-tmpl-min.js"></script>
     <script src="./assets/js/ace/ace.js"></script>
@@ -130,35 +140,30 @@ if (isset($_POST['code'])) {
     </script>
 </head>
 <body onload="prettyPrint()">
-<div class="navbar navbar-fixed-top">
+<!--div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
             <a class="brand" href="./index.php">TFSN</a>
         </div>
     </div>
-</div>
+</div-->
 <div class="container">
-    <div class="row">
+    <!--div class="row">
         <span class="span12">
             <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
         </span>
-    </div>
+    </div-->
     <div class="row">
-        <div class="span2">
+        <div class="span4">
             <div class="btn-group">
                 <a class="btn dropdown-toggle btn-large btn-info" data-toggle="dropdown" href="#">
-                    Projects
+                    <?php echo isset($site)?$site.'@':NULL; ?>mage.dev
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <?php echo $projectsList ?>
                 </ul>
             </div>
-        </div>
-        <div class="span2">
-            <label class="checkbox" for="">
-                <input type="checkbox" name="run_as_admin" id="run_as_admin"> Run as Admin?
-            </label>
         </div>
         <div id="snippets-wrapper" class="span8">
             <h3 id="slideToggleSnippets">
@@ -170,7 +175,7 @@ if (isset($_POST['code'])) {
                 <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
                     <li class="active row">
                         <a
-                            class="load-snippet span7"
+                            class="load-snippet span4"
                             data-project="${snippetProject}"
                             data-label="${snippetLabel}"
                             onClick="TFSN.LocalStorageHelper.checkSnippet(this)"
@@ -195,12 +200,8 @@ if (isset($_POST['code'])) {
     </div>
     <div class="row">
         <div class="span12">
-            <div class="output"><pre><?php echo $debugOutput ?></pre></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span12">
             <form id="code-form" method="POST" action="">
+                <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
                 <div class="input">
                     <label for="editor"></label>
                     <textarea class="editor" id="editor" name="code"></textarea>
@@ -229,12 +230,16 @@ if (isset($_POST['code'])) {
                     </span>
                     </div>
                 </div>
-                <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
                 <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
             </form>
         </div>
     </div>
     <div class="row">
+        <div class="span12">
+            <div class="output"><pre><?php echo $debugOutput ?></pre></div>
+        </div>
+    </div>
+    <!--div class="row">
         <div class="span4">
             <div class="help">
                 debug:
@@ -260,7 +265,7 @@ if (isset($_POST['code'])) {
                 \n line breaks (\r\n etc work too)
             </div>
         </div>
-    </div>
+    </div-->
 </div>
 
 <script type="text/javascript">
