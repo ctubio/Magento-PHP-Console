@@ -1,3 +1,6 @@
+:heavy_exclamation_mark:This is a (black) hijacked tool of daily personal use.  
+:bangbang:The original source is maintained at <a href="https://github.com/twslade/Magento-PHP-Console">twslade's repository</a>.
+
 PHP Console For Magento
 =======================
 
@@ -19,13 +22,22 @@ Author
 
 Thomas Slade - <dumplin593858783@gmail.com><br />
 
-Forked From:
+Forked From: https://github.com/twslade/Magento-PHP-Console (thank you so much Thomas!)
 
 Jordi Boggiano - <j.boggiano@seld.be><br />
 <http://seld.be/> - <http://twitter.com/seldaek>
 
 Changelog
 ---------
+- @ctubio
+  - Added favicon. (toolbox)
+  - Updated loader. (bannana jelly time)
+  - Updated styles to black. (and white? ..and green and blue)
+  - Updated position of elements in the layout. (input first, output last, krumo nowhere)
+  - Updated output wrapped with \<xmp\> tags. (to make it readable)
+  - Updated list of projects to only Magento based. (support for optional /public subfolder)
+  - Updated title and project selector. (with current domain name instead of title, logo and url)
+  - Released many thanks to Thomas every day since years ago:heavy_exclamation_mark:
 - 1.2.4
   - Added ability to remove and clear all snippets.
 - 1.2.3
