@@ -38,7 +38,7 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
         $title = '<img src="' . Mage::getDesign()->getSkinUrl() . Mage::getStoreConfig('design/header/logo_src') .  '" /><br />';
         $title .= (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
     }
-    $mageFile = $siteDirectory . 'public/app/Mage.php';
+    $mageFile = $siteDirectory . 'webroot/app/Mage.php';
     if(file_exists($mageFile)){
         require_once $mageFile;
         Varien_Profiler::enable();
@@ -74,6 +74,8 @@ require 'krumo/class.krumo.php';
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ERROR);
+ini_set('display_errors', 0);
 
 $debugOutput = '';
 

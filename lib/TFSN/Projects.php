@@ -16,20 +16,20 @@ class Projects {
 
 
     public function getProjectsArray($dir = null){
-    
+
         $dirArray = array();
         if(!$dir){
             $dir = $this->_directory;
         }
-        
+
         $files = glob($dir . "*");
         foreach($files as $file)
         {
             if(is_dir($file) and file_exists($file.'/mage')){$dirArray[] = $file;}
-            else if(is_dir($file) and file_exists($file.'/public'.'/mage')){$dirArray[] = $file;}
+            else if(is_dir($file) and file_exists($file.'/webroot'.'/mage')){$dirArray[] = $file;}
         }
-        
-        return $dirArray;   
+
+        return $dirArray;
     }
 
     public function renderProjects(){
