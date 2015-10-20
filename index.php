@@ -49,7 +49,6 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
         $title .= (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
     }
 
-
 }
 /**
  * PHP Console
@@ -64,7 +63,7 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
+if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '10.10.10.1', '::1'), true)) {
     	header('HTTP/1.1 401 Access unauthorized');
     	die('ERR/401 Go Away');
     }
@@ -74,8 +73,8 @@ require 'krumo/class.krumo.php';
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
-error_reporting(E_ERROR);
-ini_set('display_errors', 0);
+#error_reporting(E_ERROR);
+#ini_set('display_errors', 0);
 
 $debugOutput = '';
 
